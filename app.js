@@ -25,9 +25,14 @@ const filterInput = document.getElementById("filter-input");
 document.getElementById("login-btn").onclick = async () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-  const { data: { session }, error } = await supabase.auth.signInWithPassword({ email, password });
+
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) { alert(error.message); return; }
-  await init();
+
+  const session = data.session;
+  if (!session) { alert("Errore nella sessione"); return; }
+
+  await init(session.user);
 };
 
 // LOGOUT
@@ -105,14 +110,10 @@ async function loadCompanies() {
 }
 
 // INIT
-async function init() {
-  const { data: { session }, error } = await supabase.auth.getSession();
-  if (!session) return;
-
+async function init(user) {
   loginSection.style.display = "none";
   dashboard.style.display = "block";
 
-  const user = session.user;
   const { data: profile } = await supabase
     .from("profiles")
     .select("role")
@@ -122,7 +123,5 @@ async function init() {
   roleSpan.innerText = "Ruolo: " + profile.role;
   if (profile.role === "admin") adminArea.style.display = "block";
 
-  await loadCompanies(); // ora carica tutte le aziende immediatamente
+  await loadCompanies(); // ora carica subito tutte le aziende
 }
-
-init();
