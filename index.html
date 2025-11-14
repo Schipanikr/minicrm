@@ -1,36 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
+  <meta charset="UTF-8">
   <title>Mini CRM</title>
-  <script type="module" src="./app.js"></script>
+  <script type="module" src="app.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Mini CRM</h1>
+  <div class="container">
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+      <h2>Mini CRM</h2>
+      <ul>
+        <li id="menu-dashboard">Dashboard</li>
+        <li id="menu-add-company">Aggiungi Azienda</li>
+        <li id="menu-agents" class="admin-only">Gestione Agenti</li>
+        <li id="logout-btn">Logout</li>
+      </ul>
+    </nav>
 
-  <!-- LOGIN -->
-  <div id="login-section">
-    <h2>Login</h2>
-    <input id="email" placeholder="Email"><br>
-    <input id="password" type="password" placeholder="Password"><br>
-    <button id="login-btn">Accedi</button>
-  </div>
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <section id="login-section" class="card">
+        <h2>Login</h2>
+        <input id="email" type="email" placeholder="Email">
+        <input id="password" type="password" placeholder="Password">
+        <button id="login-btn">Accedi</button>
+      </section>
 
-  <!-- DASHBOARD -->
-  <div id="dashboard" style="display:none">
-    <p id="role"></p>
-    <div id="admin-area" style="display:none">
-      <input id="agent-email" placeholder="Email agente"><br>
-      <input id="agent-pass" type="password" placeholder="Password agente"><br>
-      <button id="create-agent-btn">Crea Agente</button>
-    </div>
-    <input id="c-name" placeholder="Nome azienda"><br>
-    <input id="c-phone" placeholder="Numero"><br>
-    <input id="c-email" placeholder="Email"><br>
-    <input id="c-city" placeholder="Città"><br>
-    <button id="add-company">Inserisci</button>
-    <ul id="company-list"></ul>
-    <button id="logout-btn">Logout</button>
+      <section id="dashboard" class="main-section" style="display:none">
+        <h2>Dashboard</h2>
+        <p id="role"></p>
+
+        <div id="admin-area" class="card admin-only" style="display:none">
+          <h3>Crea un nuovo agente</h3>
+          <input id="agent-email" placeholder="Email agente">
+          <input id="agent-pass" type="password" placeholder="Password agente">
+          <button id="create-agent-btn">Crea Agente</button>
+        </div>
+
+        <div id="add-company-form" class="card">
+          <h3>Aggiungi Azienda</h3>
+          <input id="c-name" placeholder="Nome azienda">
+          <input id="c-phone" placeholder="Numero">
+          <input id="c-email" placeholder="Email">
+          <input id="c-city" placeholder="Città">
+          <button id="add-company">Inserisci</button>
+        </div>
+
+        <div id="company-list" class="card">
+          <h3>Le tue aziende</h3>
+          <ul id="company-items"></ul>
+        </div>
+      </section>
+    </main>
   </div>
 </body>
 </html>
