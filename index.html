@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mini CRM</title>
+  <script type="module" src="./app.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Mini CRM</h1>
+
+  <!-- LOGIN -->
+  <div id="login-section">
+    <h2>Login</h2>
+    <input id="email" placeholder="Email"><br>
+    <input id="password" type="password" placeholder="Password"><br>
+    <button id="login-btn">Accedi</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" style="display:none">
+    <p id="role"></p>
+    <div id="admin-area" style="display:none">
+      <input id="agent-email" placeholder="Email agente"><br>
+      <input id="agent-pass" type="password" placeholder="Password agente"><br>
+      <button id="create-agent-btn">Crea Agente</button>
+    </div>
+    <input id="c-name" placeholder="Nome azienda"><br>
+    <input id="c-phone" placeholder="Numero"><br>
+    <input id="c-email" placeholder="Email"><br>
+    <input id="c-city" placeholder="Città"><br>
+    <button id="add-company">Inserisci</button>
+    <ul id="company-list"></ul>
+    <button id="logout-btn">Logout</button>
+  </div>
+</body>
+</html>
