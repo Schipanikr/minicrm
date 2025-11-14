@@ -43,8 +43,20 @@
         <button id="add-company">Inserisci</button>
       </div>
 
+      <!-- Filtro -->
+      <input id="filter-input" placeholder="Cerca per nome o città..." style="margin:15px; padding:10px; width:calc(100% - 30px); border-radius:6px; border:1px solid #ccc;">
+
       <!-- Lista aziende -->
       <div id="company-list" class="cards-container"></div>
+
+      <!-- Scheda dettaglio azienda -->
+      <div id="company-detail" class="card" style="display:none;">
+        <h3 id="detail-name"></h3>
+        <p><strong>Città:</strong> <span id="detail-city"></span></p>
+        <p><strong>Telefono:</strong> <span id="detail-phone"></span></p>
+        <p><strong>Email:</strong> <span id="detail-email"></span></p>
+        <button id="close-detail">Chiudi</button>
+      </div>
 
       <button id="logout-btn" class="logout-btn">Logout</button>
     </section>
