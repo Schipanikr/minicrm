@@ -1,8 +1,8 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-// 🔹 Sostituisci con il tuo URL Supabase e la tua chiave anon
-const SUPABASE_URL = "https://IL-TUO-PROJECT.supabase.co";
-const SUPABASE_KEY = "LA-TUA-ANON-KEY";
+// 🔹 Dati Supabase forniti
+const SUPABASE_URL = "https://knevyndevlqitezbsefi.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuZXZ5bmRldmxxaXRlemJzZWZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxMDgzOTYsImV4cCI6MjA3ODY4NDM5Nn0.p_a9l4YNTUUCgUsZbQN03DIiRBjl7_oR3h7S9gCFKSk";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
