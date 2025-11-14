@@ -5,6 +5,7 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// ELEMENTI
 const loginSection = document.getElementById("login-section");
 const dashboard = document.getElementById("dashboard");
 const adminArea = document.getElementById("admin-area");
@@ -24,7 +25,7 @@ const filterInput = document.getElementById("filter-input");
 document.getElementById("login-btn").onclick = async () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data: { session }, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) { alert(error.message); return; }
   init();
 };
@@ -47,12 +48,13 @@ document.getElementById("create-agent-btn").onclick = async () => {
 
 // AGGIUNGI AZIENDA
 document.getElementById("add-company").onclick = async () => {
-  const { data: user } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
   const name = document.getElementById("c-name").value;
   const phone = document.getElementById("c-phone").value;
   const email = document.getElementById("c-email").value;
   const city = document.getElementById("c-city").value;
-  await supabase.from("companies").insert({ user_id: user.user.id, name, phone, email, city });
+
+  await supabase.from("companies").insert({ user_id: user.id, name, phone, email, city });
   loadCompanies();
 };
 
@@ -67,7 +69,7 @@ filterInput.addEventListener("input", () => {
   const cards = companyList.querySelectorAll(".company-card");
   cards.forEach(card => {
     const name = card.querySelector("h4").innerText.toLowerCase();
-    const city = card.querySelector("p").innerText.toLowerCase();
+    const city = card.querySelector("p strong").nextSibling.textContent.toLowerCase();
     card.style.display = (name.includes(term) || city.includes(term)) ? "block" : "none";
   });
 });
@@ -75,7 +77,9 @@ filterInput.addEventListener("input", () => {
 // CARICA AZIENDE E CREAZIONE CARD CLICCABILI
 async function loadCompanies() {
   const { data, error } = await supabase.from("companies").select("*");
+  console.log("Companies:", data, "Error:", error);
   if (error) return;
+
   data.sort((a, b) => a.name.localeCompare(b.name));
   companyList.innerHTML = "";
 
@@ -102,12 +106,13 @@ async function loadCompanies() {
 
 // INIT
 async function init() {
-  const { data: session } = await supabase.auth.getSession();
-  if (!session.session) return;
+  const { data: { session }, error } = await supabase.auth.getSession();
+  if (!session) return;
+
   loginSection.style.display = "none";
   dashboard.style.display = "block";
 
-  const user = session.session.user;
+  const user = session.user;
   const { data: profile } = await supabase
     .from("profiles")
     .select("role")
