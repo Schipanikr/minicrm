@@ -1,6 +1,6 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-// 🔹 Dati Supabase forniti
+// 🔹 Dati Supabase
 const SUPABASE_URL = "https://knevyndevlqitezbsefi.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuZXZ5bmRldmxxaXRlemJzZWZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxMDgzOTYsImV4cCI6MjA3ODY4NDM5Nn0.p_a9l4YNTUUCgUsZbQN03DIiRBjl7_oR3h7S9gCFKSk";
 
@@ -9,17 +9,19 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 // ELEMENTI
 const loginSection = document.getElementById("login-section");
 const dashboard = document.getElementById("dashboard");
-const companyList = document.getElementById("company-list");
 const adminArea = document.getElementById("admin-area");
 const roleSpan = document.getElementById("role");
 
 // LOGIN
 document.getElementById("login-btn").onclick = async () => {
   const email = document.getElementById("email").value;
-  const pass = document.getElementById("password").value;
+  const password = document.getElementById("password").value;
 
-  const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
-  if (error) { alert(error.message); return; }
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) {
+    alert(error.message);
+    return;
+  }
 
   init();
 };
@@ -33,9 +35,9 @@ document.getElementById("logout-btn").onclick = async () => {
 // CREA AGENTE (solo admin)
 document.getElementById("create-agent-btn").onclick = async () => {
   const email = document.getElementById("agent-email").value;
-  const pass = document.getElementById("agent-pass").value;
+  const password = document.getElementById("agent-pass").value;
 
-  const { data, error } = await supabase.auth.signUp({ email, password: pass });
+  const { data, error } = await supabase.auth.signUp({ email, password });
   if (error) return alert(error.message);
 
   await supabase.from("profiles").insert({
@@ -71,10 +73,20 @@ async function loadCompanies() {
   const { data, error } = await supabase.from("companies").select("*");
   if (error) return;
 
+  const companyList = document.getElementById("company-list");
   companyList.innerHTML = "";
-  data.forEach(c =>
-    companyList.innerHTML += `<li>${c.name} – ${c.city} – ${c.phone} – ${c.email}</li>`
-  );
+
+  data.forEach(c => {
+    const div = document.createElement("div");
+    div.className = "company-card";
+    div.innerHTML = `
+      <h4>${c.name}</h4>
+      <p><strong>Città:</strong> ${c.city}</p>
+      <p><strong>Telefono:</strong> ${c.phone}</p>
+      <p><strong>Email:</strong> ${c.email}</p>
+    `;
+    companyList.appendChild(div);
+  });
 }
 
 // INIT
@@ -87,7 +99,7 @@ async function init() {
 
   const user = session.session.user;
 
-  // prendi ruolo utente
+  // Prendi ruolo utente
   const { data: profile } = await supabase
     .from("profiles")
     .select("role")
