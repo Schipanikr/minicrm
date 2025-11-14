@@ -4,62 +4,68 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mini CRM</title>
-  <script type="module" src="app.js"></script>
   <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js" defer></script>
 </head>
 <body>
-  <header>
-    <h1>Mini CRM</h1>
-  </header>
 
-  <main>
-    <!-- LOGIN -->
-    <section id="login-section" class="card">
-      <h2>Login</h2>
-      <input id="email" type="email" placeholder="Email">
-      <input id="password" type="password" placeholder="Password">
-      <button id="login-btn">Accedi</button>
-    </section>
+  <!-- MENU -->
+  <nav id="main-menu">
+    <ul>
+      <li><a href="#" id="menu-dashboard">Dashboard</a></li>
+      <li><a href="#" id="menu-aziende">Aziende</a></li>
+      <li><a href="#" id="menu-logout">Logout</a></li>
+    </ul>
+  </nav>
 
-    <!-- DASHBOARD -->
-    <section id="dashboard" class="main-section" style="display:none">
-      <p id="role"></p>
+  <!-- LOGIN -->
+  <div id="login-section">
+    <h2>Login</h2>
+    <input id="email" placeholder="Email"><br>
+    <input id="password" type="password" placeholder="Password"><br>
+    <button id="login-btn">Accedi</button>
+  </div>
 
-      <!-- Admin area -->
-      <div id="admin-area" class="card admin-only" style="display:none">
-        <h3>Crea Agente</h3>
-        <input id="agent-email" placeholder="Email agente">
-        <input id="agent-pass" type="password" placeholder="Password agente">
-        <button id="create-agent-btn">Crea Agente</button>
-      </div>
+  <!-- DASHBOARD -->
+  <div id="dashboard" style="display:none">
+    <h2>Dashboard</h2>
+    <p id="role"></p>
 
-      <!-- Aggiungi azienda -->
-      <div id="add-company-form" class="card">
-        <h3>Aggiungi Azienda</h3>
-        <input id="c-name" placeholder="Nome azienda">
-        <input id="c-phone" placeholder="Numero">
-        <input id="c-email" placeholder="Email">
-        <input id="c-city" placeholder="Città">
-        <button id="add-company">Inserisci</button>
-      </div>
+    <!-- Area admin -->
+    <div id="admin-area" style="display:none">
+      <h3>Crea un nuovo agente</h3>
+      <input id="agent-email" placeholder="Email agente"><br>
+      <input id="agent-pass" type="password" placeholder="Password agente"><br>
+      <button id="create-agent-btn">Crea Agente</button>
+    </div>
+  </div>
 
-      <!-- Filtro -->
-      <input id="filter-input" placeholder="Cerca per nome o città..." style="margin:15px; padding:10px; width:calc(100% - 30px); border-radius:6px; border:1px solid #ccc;">
+  <!-- PAGINA AZIENDE -->
+  <div id="aziende-section" style="display:none">
+    <h2>Tutte le aziende</h2>
 
-      <!-- Lista aziende -->
-      <div id="company-list" class="cards-container"></div>
+    <h3>Aggiungi Azienda</h3>
+    <input id="c-name" placeholder="Nome azienda"><br>
+    <input id="c-phone" placeholder="Numero"><br>
+    <input id="c-email" placeholder="Email"><br>
+    <input id="c-city" placeholder="Città"><br>
+    <button id="add-company">Inserisci</button>
 
-      <!-- Scheda dettaglio azienda -->
-      <div id="company-detail" class="card" style="display:none;">
-        <h3 id="detail-name"></h3>
-        <p><strong>Città:</strong> <span id="detail-city"></span></p>
-        <p><strong>Telefono:</strong> <span id="detail-phone"></span></p>
-        <p><strong>Email:</strong> <span id="detail-email"></span></p>
-        <button id="close-detail">Chiudi</button>
-      </div>
+    <h3>Filtra aziende</h3>
+    <input id="filter-input" placeholder="Cerca per nome o città">
 
-      <button id="logout-btn" class="logout-btn">Logout</button>
-    </section>
-  </main>
+    <div id="company-list"></div>
+  </div>
+
+  <!-- DETTAGLIO AZIENDA -->
+  <div id="company-detail" style="display:none">
+    <h3>Dettaglio Azienda</h3>
+    <p><strong>Nome:</strong> <span id="detail-name"></span></p>
+    <p><strong>Città:</strong> <span id="detail-city"></span></p>
+    <p><strong>Telefono:</strong> <span id="detail-phone"></span></p>
+    <p><strong>Email:</strong> <span id="detail-email"></span></p>
+    <button id="close-detail">Chiudi</button>
+  </div>
+
 </body>
 </html>
