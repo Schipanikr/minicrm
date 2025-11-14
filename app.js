@@ -5,7 +5,6 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ELEMENTI
 const loginSection = document.getElementById("login-section");
 const dashboard = document.getElementById("dashboard");
 const adminArea = document.getElementById("admin-area");
@@ -19,14 +18,14 @@ const detailPhone = document.getElementById("detail-phone");
 const detailEmail = document.getElementById("detail-email");
 const closeDetailBtn = document.getElementById("close-detail");
 
+const filterInput = document.getElementById("filter-input");
+
 // LOGIN
 document.getElementById("login-btn").onclick = async () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) { alert(error.message); return; }
-
   init();
 };
 
@@ -40,35 +39,20 @@ document.getElementById("logout-btn").onclick = async () => {
 document.getElementById("create-agent-btn").onclick = async () => {
   const email = document.getElementById("agent-email").value;
   const password = document.getElementById("agent-pass").value;
-
   const { data, error } = await supabase.auth.signUp({ email, password });
   if (error) return alert(error.message);
-
-  await supabase.from("profiles").insert({
-    id: data.user.id,
-    role: "agent"
-  });
-
+  await supabase.from("profiles").insert({ id: data.user.id, role: "agent" });
   alert("Agente creato");
 };
 
 // AGGIUNGI AZIENDA
 document.getElementById("add-company").onclick = async () => {
   const { data: user } = await supabase.auth.getUser();
-
   const name = document.getElementById("c-name").value;
   const phone = document.getElementById("c-phone").value;
   const email = document.getElementById("c-email").value;
   const city = document.getElementById("c-city").value;
-
-  await supabase.from("companies").insert({
-    user_id: user.user.id,
-    name,
-    phone,
-    email,
-    city
-  });
-
+  await supabase.from("companies").insert({ user_id: user.user.id, name, phone, email, city });
   loadCompanies();
 };
 
@@ -77,14 +61,22 @@ closeDetailBtn.onclick = () => {
   companyDetail.style.display = "none";
 };
 
-// CARICA E ORDINA AZIENDE
+// FILTRO
+filterInput.addEventListener("input", () => {
+  const term = filterInput.value.toLowerCase();
+  const cards = companyList.querySelectorAll(".company-card");
+  cards.forEach(card => {
+    const name = card.querySelector("h4").innerText.toLowerCase();
+    const city = card.querySelector("p").innerText.toLowerCase();
+    card.style.display = (name.includes(term) || city.includes(term)) ? "block" : "none";
+  });
+});
+
+// CARICA AZIENDE E CREAZIONE CARD CLICCABILI
 async function loadCompanies() {
   const { data, error } = await supabase.from("companies").select("*");
   if (error) return;
-
-  // Ordina alfabeticamente per nome
   data.sort((a, b) => a.name.localeCompare(b.name));
-
   companyList.innerHTML = "";
 
   data.forEach(c => {
@@ -96,8 +88,6 @@ async function loadCompanies() {
       <p><strong>Telefono:</strong> ${c.phone}</p>
       <p><strong>Email:</strong> ${c.email}</p>
     `;
-
-    // Click sulla card apre il dettaglio
     div.onclick = () => {
       detailName.innerText = c.name;
       detailCity.innerText = c.city;
@@ -106,7 +96,6 @@ async function loadCompanies() {
       companyDetail.style.display = "block";
       companyDetail.scrollIntoView({ behavior: "smooth" });
     };
-
     companyList.appendChild(div);
   });
 }
@@ -115,13 +104,10 @@ async function loadCompanies() {
 async function init() {
   const { data: session } = await supabase.auth.getSession();
   if (!session.session) return;
-
   loginSection.style.display = "none";
   dashboard.style.display = "block";
 
   const user = session.session.user;
-
-  // Prendi ruolo utente
   const { data: profile } = await supabase
     .from("profiles")
     .select("role")
@@ -129,10 +115,7 @@ async function init() {
     .single();
 
   roleSpan.innerText = "Ruolo: " + profile.role;
-
-  if (profile.role === "admin") {
-    adminArea.style.display = "block";
-  }
+  if (profile.role === "admin") adminArea.style.display = "block";
 
   loadCompanies();
 }
