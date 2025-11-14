@@ -1,6 +1,5 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-// 🔹 Dati Supabase
 const SUPABASE_URL = "https://knevyndevlqitezbsefi.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuZXZ5bmRldmxxaXRlemJzZWZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxMDgzOTYsImV4cCI6MjA3ODY4NDM5Nn0.p_a9l4YNTUUCgUsZbQN03DIiRBjl7_oR3h7S9gCFKSk";
 
@@ -11,6 +10,7 @@ const loginSection = document.getElementById("login-section");
 const dashboard = document.getElementById("dashboard");
 const adminArea = document.getElementById("admin-area");
 const roleSpan = document.getElementById("role");
+const companyList = document.getElementById("company-list");
 
 // LOGIN
 document.getElementById("login-btn").onclick = async () => {
@@ -18,10 +18,7 @@ document.getElementById("login-btn").onclick = async () => {
   const password = document.getElementById("password").value;
 
   const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) {
-    alert(error.message);
-    return;
-  }
+  if (error) { alert(error.message); return; }
 
   init();
 };
@@ -32,7 +29,7 @@ document.getElementById("logout-btn").onclick = async () => {
   location.reload();
 };
 
-// CREA AGENTE (solo admin)
+// CREA AGENTE
 document.getElementById("create-agent-btn").onclick = async () => {
   const email = document.getElementById("agent-email").value;
   const password = document.getElementById("agent-pass").value;
@@ -68,12 +65,25 @@ document.getElementById("add-company").onclick = async () => {
   loadCompanies();
 };
 
-// CARICA AZIENDE
+// FILTRO AZIENDE
+document.getElementById("filter-input")?.addEventListener("input", (e) => {
+  const term = e.target.value.toLowerCase();
+  const cards = companyList.querySelectorAll(".company-card");
+  cards.forEach(card => {
+    const name = card.querySelector("h4").innerText.toLowerCase();
+    const city = card.querySelector("p:nth-of-type(1)").innerText.toLowerCase();
+    card.style.display = (name.includes(term) || city.includes(term)) ? "block" : "none";
+  });
+});
+
+// CARICA E ORDINA AZIENDE
 async function loadCompanies() {
   const { data, error } = await supabase.from("companies").select("*");
   if (error) return;
 
-  const companyList = document.getElementById("company-list");
+  // Ordina alfabeticamente per nome
+  data.sort((a, b) => a.name.localeCompare(b.name));
+
   companyList.innerHTML = "";
 
   data.forEach(c => {
@@ -114,5 +124,4 @@ async function init() {
 
   loadCompanies();
 }
-
 init();
