@@ -22,6 +22,20 @@ const closeDetailBtn = document.getElementById("close-detail");
 
 const filterInput = document.getElementById("filter-input");
 
+// MENU NAV
+document.getElementById("menu-dashboard").onclick = () => {
+  dashboard.style.display = "block";
+  aziendeSection.style.display = "none";
+};
+document.getElementById("menu-aziende").onclick = () => {
+  dashboard.style.display = "none";
+  aziendeSection.style.display = "block";
+};
+document.getElementById("menu-logout").onclick = async () => {
+  await supabase.auth.signOut();
+  location.reload();
+};
+
 // LOGIN
 document.getElementById("login-btn").onclick = async () => {
   const email = document.getElementById("email").value;
@@ -33,13 +47,10 @@ document.getElementById("login-btn").onclick = async () => {
   const session = data.session;
   if (!session) { alert("Errore nella sessione"); return; }
 
+  // Appena login, mostra subito la pagina Aziende
   await init(session.user);
-};
-
-// LOGOUT
-document.getElementById("menu-logout").onclick = async () => {
-  await supabase.auth.signOut();
-  location.reload();
+  dashboard.style.display = "none";
+  aziendeSection.style.display = "block";
 };
 
 // CREA AGENTE
@@ -80,20 +91,10 @@ filterInput.addEventListener("input", () => {
   });
 });
 
-// MENU NAV
-document.getElementById("menu-dashboard").onclick = () => {
-  dashboard.style.display = "block";
-  aziendeSection.style.display = "none";
-};
-document.getElementById("menu-aziende").onclick = () => {
-  dashboard.style.display = "none";
-  aziendeSection.style.display = "block";
-};
-
 // CARICA AZIENDE
 async function loadCompanies() {
   const { data, error } = await supabase.from("companies").select("*");
-  if (error) return;
+  if (error) { console.log(error); return; }
 
   data.sort((a, b) => a.name.localeCompare(b.name));
   companyList.innerHTML = "";
@@ -122,7 +123,6 @@ async function loadCompanies() {
 // INIT
 async function init(user) {
   loginSection.style.display = "none";
-  dashboard.style.display = "block";
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -133,5 +133,5 @@ async function init(user) {
   roleSpan.innerText = "Ruolo: " + profile.role;
   if (profile.role === "admin") adminArea.style.display = "block";
 
-  await loadCompanies();
+  await loadCompanies(); // carica subito le aziende
 }
