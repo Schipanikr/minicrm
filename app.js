@@ -12,6 +12,13 @@ const adminArea = document.getElementById("admin-area");
 const roleSpan = document.getElementById("role");
 const companyList = document.getElementById("company-list");
 
+const companyDetail = document.getElementById("company-detail");
+const detailName = document.getElementById("detail-name");
+const detailCity = document.getElementById("detail-city");
+const detailPhone = document.getElementById("detail-phone");
+const detailEmail = document.getElementById("detail-email");
+const closeDetailBtn = document.getElementById("close-detail");
+
 // LOGIN
 document.getElementById("login-btn").onclick = async () => {
   const email = document.getElementById("email").value;
@@ -65,16 +72,10 @@ document.getElementById("add-company").onclick = async () => {
   loadCompanies();
 };
 
-// FILTRO AZIENDE
-document.getElementById("filter-input")?.addEventListener("input", (e) => {
-  const term = e.target.value.toLowerCase();
-  const cards = companyList.querySelectorAll(".company-card");
-  cards.forEach(card => {
-    const name = card.querySelector("h4").innerText.toLowerCase();
-    const city = card.querySelector("p:nth-of-type(1)").innerText.toLowerCase();
-    card.style.display = (name.includes(term) || city.includes(term)) ? "block" : "none";
-  });
-});
+// CHIUDI DETTAGLIO
+closeDetailBtn.onclick = () => {
+  companyDetail.style.display = "none";
+};
 
 // CARICA E ORDINA AZIENDE
 async function loadCompanies() {
@@ -95,6 +96,17 @@ async function loadCompanies() {
       <p><strong>Telefono:</strong> ${c.phone}</p>
       <p><strong>Email:</strong> ${c.email}</p>
     `;
+
+    // Click sulla card apre il dettaglio
+    div.onclick = () => {
+      detailName.innerText = c.name;
+      detailCity.innerText = c.city;
+      detailPhone.innerText = c.phone;
+      detailEmail.innerText = c.email;
+      companyDetail.style.display = "block";
+      companyDetail.scrollIntoView({ behavior: "smooth" });
+    };
+
     companyList.appendChild(div);
   });
 }
@@ -124,4 +136,5 @@ async function init() {
 
   loadCompanies();
 }
+
 init();
