@@ -27,7 +27,7 @@ document.getElementById("login-btn").onclick = async () => {
   const password = document.getElementById("password").value;
   const { data: { session }, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) { alert(error.message); return; }
-  init();
+  await init();
 };
 
 // LOGOUT
@@ -55,7 +55,7 @@ document.getElementById("add-company").onclick = async () => {
   const city = document.getElementById("c-city").value;
 
   await supabase.from("companies").insert({ user_id: user.id, name, phone, email, city });
-  loadCompanies();
+  await loadCompanies();
 };
 
 // CHIUDI DETTAGLIO
@@ -122,7 +122,7 @@ async function init() {
   roleSpan.innerText = "Ruolo: " + profile.role;
   if (profile.role === "admin") adminArea.style.display = "block";
 
-  loadCompanies();
+  await loadCompanies(); // ora carica tutte le aziende immediatamente
 }
 
 init();
