@@ -11,6 +11,7 @@ const dashboard = document.getElementById("dashboard");
 const adminArea = document.getElementById("admin-area");
 const roleSpan = document.getElementById("role");
 const companyList = document.getElementById("company-list");
+const aziendeSection = document.getElementById("aziende-section");
 
 const companyDetail = document.getElementById("company-detail");
 const detailName = document.getElementById("detail-name");
@@ -36,7 +37,7 @@ document.getElementById("login-btn").onclick = async () => {
 };
 
 // LOGOUT
-document.getElementById("logout-btn").onclick = async () => {
+document.getElementById("menu-logout").onclick = async () => {
   await supabase.auth.signOut();
   location.reload();
 };
@@ -79,10 +80,19 @@ filterInput.addEventListener("input", () => {
   });
 });
 
-// CARICA AZIENDE E CREAZIONE CARD CLICCABILI
+// MENU NAV
+document.getElementById("menu-dashboard").onclick = () => {
+  dashboard.style.display = "block";
+  aziendeSection.style.display = "none";
+};
+document.getElementById("menu-aziende").onclick = () => {
+  dashboard.style.display = "none";
+  aziendeSection.style.display = "block";
+};
+
+// CARICA AZIENDE
 async function loadCompanies() {
   const { data, error } = await supabase.from("companies").select("*");
-  console.log("Companies:", data, "Error:", error);
   if (error) return;
 
   data.sort((a, b) => a.name.localeCompare(b.name));
@@ -123,5 +133,5 @@ async function init(user) {
   roleSpan.innerText = "Ruolo: " + profile.role;
   if (profile.role === "admin") adminArea.style.display = "block";
 
-  await loadCompanies(); // ora carica subito tutte le aziende
+  await loadCompanies();
 }
