@@ -1,91 +1,78 @@
 body {
+  font-family: Arial, sans-serif;
   margin: 0;
-  font-family: "Arial", sans-serif;
-  background-color: #f8f8f8;
+  padding: 0;
+  background: #f5f5f5;
 }
 
-header {
-  background-color: #0070d2;
-  color: #fff;
-  padding: 15px;
-  text-align: center;
-}
-
-.card {
-  background-color: #fff;
-  margin: 15px;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-input {
-  display: block;
-  width: 100%;
-  margin: 10px 0;
+nav#main-menu {
+  background: #007bff;
+  color: white;
   padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+}
+
+nav#main-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+nav#main-menu li {
+  margin-right: 20px;
+}
+
+nav#main-menu a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+input, button {
+  padding: 8px;
+  margin: 5px 0;
+  width: 100%;
   box-sizing: border-box;
 }
 
 button {
-  display: block;
-  width: 100%;
-  padding: 12px;
+  background: #007bff;
+  color: white;
   border: none;
-  border-radius: 6px;
-  background-color: #0070d2;
-  color: #fff;
-  font-weight: bold;
   cursor: pointer;
-  transition: 0.2s;
 }
 
 button:hover {
-  background-color: #005bb5;
+  background: #0056b3;
 }
 
-.cards-container {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 15px;
-  margin: 15px;
-}
-
+/* Card aziende */
 .company-card {
+  background: white;
   padding: 15px;
-  background-color: #fff;
+  margin: 10px 0;
   border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 0 6px rgba(0,0,0,0.1);
   cursor: pointer;
-  transition: transform 0.1s;
+  transition: transform 0.2s;
 }
 
 .company-card:hover {
   transform: scale(1.02);
 }
 
-.admin-only {
-  display: none;
+/* Dettaglio azienda */
+#company-detail {
+  background: white;
+  padding: 15px;
+  margin: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.1);
 }
 
-.logout-btn {
-  background-color: #d9534f;
-}
-
-.logout-btn:hover {
-  background-color: #c9302c;
-}
-
-@media (min-width: 600px) {
-  .cards-container {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (min-width: 900px) {
-  .cards-container {
-    grid-template-columns: 1fr 1fr 1fr;
+/* Responsive */
+@media(max-width:600px) {
+  nav#main-menu ul {
+    flex-direction: column;
   }
 }
